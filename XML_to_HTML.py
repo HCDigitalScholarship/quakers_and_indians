@@ -4,7 +4,7 @@ from lxml import etree
 import lxml.etree as ET
 from html5lib.sanitizer import HTMLSanitizerMixin
 
-xml_file =  input( "Please insert path to XML file that you would like to convert to HTML:  ") #'/Users/oluwatosinalliyu/Desktop/quakers_and_indians/Letterscopy.xml'
+xml_file =  input( "Please insert path to XML file that you would like to convert to HTML:  ") 
 tree = etree.parse(xml_file)
 xml_string = etree.tostring(tree)
 
