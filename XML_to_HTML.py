@@ -73,8 +73,6 @@ for row in root.iter("row"):
 for cell in root.iter("cell"):
     cell.tag = "td"
     cell.attrib.clear()
-
-#for page_break in root.iter("pb"):
     
 new_tree.write(xml_toChange)
 
@@ -99,12 +97,5 @@ with open(xml_toChange, 'rb') as f, open('new_'+ converted_file, 'wb') as g:
     g.write('<!DOCTYPE html><html>{}</html>'.format(f.read()))
 
 
-
-##html_file = input( "Please insert path to converted XML file:  ") #path to new_ converter_file
-##tree = etree.HTML(html_file)
-##html_string = etree.tostring(tree)
-##
-##for elements in html_string:
-##    html_string.find("<pb")
 
 
