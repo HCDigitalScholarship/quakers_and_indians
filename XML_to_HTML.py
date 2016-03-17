@@ -1,8 +1,11 @@
 import xml.etree.ElementTree as ET
-import os 
+import os
+import re
 from lxml import etree
 import lxml.etree as ET
 from html5lib.sanitizer import HTMLSanitizerMixin
+from bs4 import BeautifulSoup
+
 
 xml_file =  input( "Please insert path to XML file that you would like to convert to HTML:  ") 
 tree = etree.parse(xml_file)
@@ -17,10 +20,8 @@ text_file = open("converted_" + converted_file, "w")
 text_file.write(new_xml_string)
 text_file.close()
 
-
-
        
-xml_toChange =  input( "Please insert path to converted_xml_file.xml:  ") #path to converted_xml_file.xml  
+xml_toChange =  input("Please insert path to converted_xml_file.xml: ") #path to converted_xml_file.xml  
 
 new_tree = ET.parse(xml_toChange)
 root = new_tree.getroot()
@@ -64,6 +65,12 @@ for line_break in root.iter("lb"):
     line_break.tag = "br"
     line_break.attrib.clear()
     
+for page_break in root.iter("pb"):
+    for attr in page_break.attrib:
+        if attr != 'n':
+            del page_break.attrib[attr]
+    
+
 for title in root.iter("title"):
     title.tag = "h1"
 
@@ -76,26 +83,29 @@ for cell in root.iter("cell"):
     
 new_tree.write(xml_toChange)
 
+another_tree = etree.parse(xml_toChange) #parses xml file
+xml_string = etree.tostring(another_tree) #converts parsed xml file to string 
 
-another_tree = etree.parse(xml_toChange)
-xml_string = etree.tostring(another_tree)
 
 
 list_of_xml_tags = [elem.tag for elem in root.iter() if elem is not root]
 
 for tag in list_of_xml_tags:
     if tag not in HTMLSanitizerMixin.acceptable_elements and tag != "body" and tag != "pb" :
-        etree.strip_tags(another_tree, tag)
+        etree.strip_tags(another_tree, tag) #takes out tags that are not html tags from xml (changing to html) file
         
 
-another_tree.write(xml_toChange)
+another_tree.write(xml_toChange)#changes the file saved as xml_toChange so that it does not include unrecognized HTML tags
 
-#insert <!DOCTYPE html>
-#insert html opening and closing tag
 
-with open(xml_toChange, 'rb') as f, open('new_'+ converted_file, 'wb') as g:
+with open(xml_toChange, 'rb') as f, open('new_'+ converted_file,  'wb') as g:
     g.write('<!DOCTYPE html><html>{}</html>'.format(f.read()))
+    #adds html header to xml_toChange and writes to new file, which is essentially now converted to a html file
 
+#MAKE SURE TO COPY FILE THAT WAS JUST CREATED AND SAVE WITH AN HTML EXTENSIO
+from page_break_csv import csv_page_break
+
+csv_page_break()
 
 
 
