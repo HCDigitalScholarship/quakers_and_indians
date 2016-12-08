@@ -2,7 +2,7 @@ import os
 import re
 import shutil
 from lxml import etree
-from html5lib.sanitizer import HTMLSanitizerMixin
+#from html5lib.sanitizer import HTMLSanitizerMixin -- sanitizer decripted
 from bs4 import BeautifulSoup
 
 
@@ -145,9 +145,21 @@ new_tree.write(xml_toChange) #updates the changes made above in the file
 another_tree = etree.parse(xml_toChange) #parses xml file 
 
 list_of_xml_tags = [elem.tag for elem in root.iter() if elem is not root] #gets all tags in the xml file 
-
+acceptable_html_tags = ['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside',/
+             'audio', 'b', 'big', 'blockquote', 'br', 'button', 'canvas',/
+             'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'command',/
+             'datagrid', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog',/
+             'dir', 'div', 'dl', 'dt', 'em', 'event-source', 'fieldset',/
+             'figcaption', 'figure', 'footer', 'font', 'form', 'header',/
+             'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'input',/
+             'ins', 'keygen', 'kbd', 'label', 'legend', 'li', 'm', 'map',/
+             'menu', 'meter', 'multicol', 'nav', 'nextid', 'ol', 'output',/
+             'optgroup', 'option', 'p', 'pre', 'progress', 'q', 's', 'samp',/
+             'section', 'select', 'small', 'sound', 'source', 'spacer', 'span',/
+             'strike', 'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea',/
+             'time', 'tfoot', 'th', 'thead', 'tr', 'tt', 'u', 'ul', 'var', 'video']
 for tag in list_of_xml_tags:#takes out all tags that are not approporiate html tags from the xml file except for the root, body tag and pg tag
-    if tag not in HTMLSanitizerMixin.acceptable_elements and tag != "body" and tag != "pb" :
+    if tag not in acceptable_html_tags and tag != "body" and tag != "pb" :
         etree.strip_tags(another_tree, tag) 
         
 
